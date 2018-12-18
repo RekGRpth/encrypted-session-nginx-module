@@ -1,29 +1,31 @@
-if test -n "$ngx_module_link"; then
-    if test -n "$NDK_SRCS"; then
-        echo "found ngx_devel_kit for ngx_encrypted_session; looks good."
-    else
-        echo "error: ngx_devel_kit is required to build ngx_encrypted_session; please put it before ngx_encrypted_session." 1>&2
-        exit 1
-    fi
-else
-    if echo $HTTP_MODULES | grep " ndk_http_module" > /dev/null; then
-        echo "found ngx_devel_kit for ngx_encrypted_session; looks good."
-    else
-        echo "error: ngx_devel_kit is required to build ngx_encrypted_session; please put it before ngx_encrypted_session." 1>&2
-        exit 1
-    fi
-fi
+#if test -n "$ngx_module_link"; then
+#    if test -n "$NDK_SRCS"; then
+#        echo "found ngx_devel_kit for ngx_encrypted_session; looks good."
+#    else
+#        echo "error: ngx_devel_kit is required to build ngx_encrypted_session; please put it before ngx_encrypted_session." 1>&2
+#        exit 1
+#    fi
+#else
+#    if echo $HTTP_MODULES | grep " ndk_http_module" > /dev/null; then
+#        echo "found ngx_devel_kit for ngx_encrypted_session; looks good."
+#    else
+#        echo "error: ngx_devel_kit is required to build ngx_encrypted_session; please put it before ngx_encrypted_session." 1>&2
+#        exit 1
+#    fi
+#fi
 
 ngx_addon_name=ngx_http_encrypted_session_module
 
 HTTP_ENCRYPTED_SESSION_SRCS="                                               \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_module.c  \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_cipher.c  \
+                    $ngx_addon_dir/src/ndk.c                                \
                     "
 
 HTTP_ENCRYPTED_SESSION_DEPS="                                               \
                     $ngx_addon_dir/src/ddebug.h                             \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_cipher.h  \
+                    $ngx_addon_dir/src/ndk.h                                \
                     "
 
 if test -n "$ngx_module_link"; then
