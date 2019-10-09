@@ -1,4 +1,4 @@
-#include    "ndk.h"
+#include    "ndk_set_var.h"
 
 
 extern ngx_module_t  ngx_http_rewrite_module;

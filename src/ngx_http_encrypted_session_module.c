@@ -9,7 +9,7 @@
 #endif
 #include "ddebug.h"
 
-#include "ndk.h"
+#include "ndk_set_var.h"
 #include "ngx_http_encrypted_session_cipher.h"
 
 #define ngx_http_encrypted_session_default_iv (u_char *) "deadbeefdeadbeef"

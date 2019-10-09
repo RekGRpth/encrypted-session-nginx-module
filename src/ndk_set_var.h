@@ -6,6 +6,9 @@
 #define _NDK_SET_VAR_H_INCLUDED_
 
 
+#include <ngx_http.h>
+
+
 typedef ngx_int_t   (*ndk_set_var_pt)              (ngx_http_request_t *r, ngx_str_t *val);
 typedef ngx_int_t   (*ndk_set_var_data_pt)         (ngx_http_request_t *r, ngx_str_t *val, void *data);
 typedef ngx_int_t   (*ndk_set_var_value_pt)        (ngx_http_request_t *r, ngx_str_t *val, ngx_http_variable_value_t *v);
