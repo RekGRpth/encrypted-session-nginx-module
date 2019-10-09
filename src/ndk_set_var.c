@@ -1,6 +1,9 @@
 #include    "ndk.h"
 
 
+extern ngx_module_t  ngx_http_rewrite_module;
+
+
 typedef struct {
     ngx_http_script_code_pt     code;
     void                       *func;
@@ -70,7 +73,7 @@ ndk_set_var_code_finalize(ngx_http_script_engine_t *e, ngx_int_t rc,
 
     case NGX_ERROR:
 
-        e->ip = ndk_http_script_exit;
+        e->ip = ngx_http_script_exit;
         e->status = NGX_HTTP_INTERNAL_SERVER_ERROR;
         break;
     }
@@ -232,7 +235,7 @@ ndk_set_var_hash_code(ngx_http_script_engine_t *e)
 
     p = ngx_palloc(e->request->pool, svs->size);
     if (p == NULL) {
-        e->ip = ndk_http_script_exit;
+        e->ip = ngx_http_script_exit;
         e->status = NGX_HTTP_INTERNAL_SERVER_ERROR;
         return;
     }
