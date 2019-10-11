@@ -12,6 +12,7 @@
 #include "ndk_set_var.h"
 #include "ngx_http_encrypted_session_cipher.h"
 
+#define ngx_http_encrypted_session_default_key (u_char *) "abcdefghijklmnopqrstuvwxyz123456"
 #define ngx_http_encrypted_session_default_iv (u_char *) "deadbeefdeadbeef"
 
 #define ngx_http_encrypted_session_default_expires 86400
@@ -423,7 +424,8 @@ ngx_http_encrypted_session_merge_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_http_encrypted_session_conf_t *prev = parent;
     ngx_http_encrypted_session_conf_t *conf = child;
 
-    ngx_conf_merge_ptr_value(conf->key, prev->key, NULL);
+    ngx_conf_merge_ptr_value(conf->key, prev->key,
+                             ngx_http_encrypted_session_default_key);
 
     ngx_conf_merge_ptr_value(conf->iv, prev->iv,
                              ngx_http_encrypted_session_default_iv);
