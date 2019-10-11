@@ -26,7 +26,7 @@ typedef struct {
 
 
 static ngx_int_t ngx_http_set_encode_encrypted_session(ngx_http_request_t *r,
-    ngx_str_t *res, ngx_http_variable_value_t *v);
+    ngx_str_t *res, ngx_http_variable_value_t *v, void *data);
 
 static ngx_int_t ngx_http_set_decode_encrypted_session(ngx_http_request_t *r,
     ngx_str_t *res, ngx_http_variable_value_t *v);
@@ -42,6 +42,9 @@ static char *ngx_http_encrypted_session_iv(ngx_conf_t *cf, ngx_command_t *cmd,
 static char *ngx_http_encrypted_session_expires(ngx_conf_t *cf,
     ngx_command_t *cmd, void *conf);
 
+static char *ngx_http_encrypted_session(ngx_conf_t *cf,
+    ngx_command_t *cmd, void *conf);
+
 
 static ngx_int_t ngx_http_encrypted_session_init(ngx_conf_t *cf);
 static void *ngx_http_encrypted_session_create_main_conf(ngx_conf_t *cf);
@@ -53,13 +56,6 @@ static void *ngx_http_encrypted_session_create_conf(ngx_conf_t *cf);
 static char *ngx_http_encrypted_session_merge_conf(ngx_conf_t *cf, void *parent,
     void *child);
 
-
-static  ndk_set_var_t  ngx_http_set_encode_encrypted_session_filter = {
-    NDK_SET_VAR_VALUE,
-    (void *) ngx_http_set_encode_encrypted_session,
-    1,
-    NULL
-};
 
 static  ndk_set_var_t  ngx_http_set_decode_encrypted_session_filter = {
     NDK_SET_VAR_VALUE,
@@ -100,11 +96,11 @@ static ngx_command_t  ngx_http_encrypted_session_commands[] = {
     {
         ngx_string("set_encrypt_session"),
         NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_SIF_CONF
-            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12,
-        ndk_set_var_value,
+            |NGX_HTTP_LOC_CONF|NGX_HTTP_LIF_CONF|NGX_CONF_TAKE12|NGX_CONF_TAKE3,
+        ngx_http_encrypted_session,
         NGX_HTTP_LOC_CONF_OFFSET,
         0,
-        &ngx_http_set_encode_encrypted_session_filter
+        NULL
     },
     {
         ngx_string("set_decrypt_session"),
@@ -153,7 +149,7 @@ ngx_module_t  ngx_http_encrypted_session_module = {
 
 static ngx_int_t
 ngx_http_set_encode_encrypted_session(ngx_http_request_t *r,
-    ngx_str_t *res, ngx_http_variable_value_t *v)
+    ngx_str_t *res, ngx_http_variable_value_t *v, void *data)
 {
     size_t                   len;
     u_char                  *dst;
@@ -172,14 +168,15 @@ ngx_http_set_encode_encrypted_session(ngx_http_request_t *r,
 
         return NGX_ERROR;
     }
-
+    time_t *expires = data;
+    if (!expires) expires = &conf->expires;
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
-                   "encrypted_session: expires=%T", conf->expires);
+                   "encrypted_session: expires=%T", *expires);
 
     rc = ngx_http_encrypted_session_aes_mac_encrypt(emcf, r->pool,
             r->connection->log, conf->iv, ngx_http_encrypted_session_iv_length,
             conf->key, ngx_http_encrypted_session_key_length,
-            v->data, v->len, (ngx_uint_t) conf->expires, &dst, &len);
+            v->data, v->len, (ngx_uint_t) *expires, &dst, &len);
 
     if (rc != NGX_OK) {
         dst = NULL;
@@ -324,6 +321,18 @@ ngx_http_encrypted_session_expires(ngx_conf_t *cf, ngx_command_t *cmd,
     dd("expires: %d", (int) llcf->expires);
 
     return NGX_CONF_OK;
+}
+
+
+static char *ngx_http_encrypted_session(ngx_conf_t *cf, ngx_command_t *cmd, void *conf){
+    time_t *expires = NULL;
+    ngx_str_t *elts = cf->args->elts;
+    if (cf->args->nelts == 4) {
+        if (!(expires = ngx_palloc(cf->pool, sizeof(time_t)))) { ngx_conf_log_error(NGX_LOG_EMERG, cf, 0, "!ngx_palloc"); return NGX_CONF_ERROR; }
+        if ((*expires = ngx_parse_time(&elts[3], 1)) == NGX_ERROR) { ngx_conf_log_error(NGX_LOG_EMERG, cf, 0, "ngx_parse_time == NGX_ERROR"); return NGX_CONF_ERROR; }
+    }
+    ndk_set_var_t filter = { NDK_SET_VAR_VALUE_DATA, ngx_http_set_encode_encrypted_session, 1, expires };
+    return ndk_set_var_value_core(cf, &elts[1], &elts[2], &filter);
 }
 
 
