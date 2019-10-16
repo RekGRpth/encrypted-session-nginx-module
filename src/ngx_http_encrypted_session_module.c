@@ -9,7 +9,6 @@
 #endif
 #include "ddebug.h"
 
-#include "ndk_set_var.h"
 #include "ngx_http_encrypted_session_cipher.h"
 
 #define ngx_http_encrypted_session_default_key (u_char *) "abcdefghijklmnopqrstuvwxyz123456"

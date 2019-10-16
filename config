@@ -19,13 +19,11 @@ ngx_addon_name=ngx_http_encrypted_session_module
 HTTP_ENCRYPTED_SESSION_SRCS="                                               \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_module.c  \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_cipher.c  \
-                    $ngx_addon_dir/src/ndk_set_var.c                                \
                     "
 
 HTTP_ENCRYPTED_SESSION_DEPS="                                               \
                     $ngx_addon_dir/src/ddebug.h                             \
                     $ngx_addon_dir/src/ngx_http_encrypted_session_cipher.h  \
-                    $ngx_addon_dir/src/ndk_set_var.h                                \
                     "
 
 if test -n "$ngx_module_link"; then
