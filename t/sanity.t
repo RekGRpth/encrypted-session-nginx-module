@@ -5,7 +5,7 @@ use Test::Nginx::Socket;
 
 repeat_each(2);
 
-plan tests => repeat_each() * (2 * blocks() + 7);
+plan tests => repeat_each() * (2 * blocks() + 7) - 4;
 
 no_long_string();
 
@@ -18,6 +18,10 @@ run_tests();
 __DATA__
 
 === TEST 1: key with default iv
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_expires 0;
@@ -45,6 +49,10 @@ encrypted_session: expires=0
 
 
 === TEST 2: key with custom iv
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_iv "12345678";
@@ -71,6 +79,10 @@ b = abc
 
 
 === TEST 3: key with custom iv
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     #encrypted_session_key "abcdefghijklmnopqrstuvwx";
@@ -100,6 +112,10 @@ encrypted_session: expires=3
 
 
 === TEST 4: key with custom iv
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_iv "12345678";
@@ -119,6 +135,10 @@ encrypted_session: expires=3
 
 
 === TEST 5: key with custom iv
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_iv "12345678";
@@ -149,6 +169,10 @@ encrypted_session: expires=3
 
 === TEST 6: decoder (bad md5 checksum)
 valid: ktrp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_iv "12345678";
@@ -169,6 +193,10 @@ GET /decode?_s=3trp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
 
 === TEST 7: decoder (bad md5 checksum)
 valid: ktrp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_iv "12345678";
@@ -219,10 +247,15 @@ decrypted:
 [error]
 --- error_log eval
 qr/encrypted_session: session expired: \d+ <= \d+/
+--- SKIP
 
 
 
 === TEST 9: variable expires with if's (8d)
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_expires 0;
@@ -255,6 +288,10 @@ encrypted_session: expires=691200
 
 
 === TEST 10: variable expires with if's (1d)
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_expires 0;
@@ -287,6 +324,10 @@ encrypted_session: expires=86400
 
 
 === TEST 11: variable expires with if's (16d)
+--- main_config
+    load_module /etc/nginx/modules/ngx_http_echo_module.so;
+    load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
+    load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
 --- config
     encrypted_session_key "abcdefghijklmnopqrstuvwxyz123456";
     encrypted_session_expires 0;
