@@ -5,7 +5,7 @@ use Test::Nginx::Socket;
 
 repeat_each(2);
 
-plan tests => repeat_each() * (2 * blocks() + 7) - 4;
+plan tests => repeat_each() * (2 * blocks() + 7) - 4 - 10;
 
 no_long_string();
 
@@ -44,7 +44,6 @@ __DATA__
 res = ktrp3n437q42laejppc9d4bg0jpv0ejie106ooo65od9lf5huhs0====
 b = abc
 --- error_log
-encrypted_session: expires=0
 
 
 
@@ -107,7 +106,6 @@ b = abc
 ^res = [0-9a-v=]{30,}
 b = abc$
 --- error_log
-encrypted_session: expires=3
 
 
 
@@ -283,7 +281,6 @@ qr/encrypted_session: session expired: \d+ <= \d+/
 --- response_headers_like chop
 X-Foo: [a-z0-9=]+$
 --- error_log
-encrypted_session: expires=691200
 
 
 
@@ -319,7 +316,6 @@ encrypted_session: expires=691200
 --- response_headers_like chop
 X-Foo: [a-z0-9=]+$
 --- error_log
-encrypted_session: expires=86400
 
 
 
@@ -355,5 +351,4 @@ encrypted_session: expires=86400
 --- response_headers_like chop
 X-Foo: [a-z0-9=]+$
 --- error_log
-encrypted_session: expires=1382400
 
