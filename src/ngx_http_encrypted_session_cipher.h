@@ -2,6 +2,7 @@
 #define NGX_HTTP_ENCRYPTED_SESSION_CIPHER_H
 
 
+#include <ndk_set_var.h>
 #include <ngx_core.h>
 #include <ngx_http.h>
 #include <openssl/evp.h>
