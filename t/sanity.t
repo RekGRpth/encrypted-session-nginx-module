@@ -19,6 +19,7 @@ __DATA__
 
 === TEST 1: key with default iv
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -49,6 +50,7 @@ b = abc
 
 === TEST 2: key with custom iv
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -79,6 +81,7 @@ b = abc
 
 === TEST 3: key with custom iv
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -111,6 +114,7 @@ b = abc$
 
 === TEST 4: key with custom iv
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -134,6 +138,7 @@ b = abc$
 
 === TEST 5: key with custom iv
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -168,6 +173,7 @@ b = abc$
 === TEST 6: decoder (bad md5 checksum)
 valid: ktrp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -192,6 +198,7 @@ GET /decode?_s=3trp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
 === TEST 7: decoder (bad md5 checksum)
 valid: ktrp3n437q42laejppc9d4bg0j0i6np4tdpovhgdum09l7a0rg10====
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -251,6 +258,7 @@ qr/encrypted_session: session expired: \d+ <= \d+/
 
 === TEST 9: variable expires with if's (8d)
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -286,6 +294,7 @@ X-Foo: [a-z0-9=]+$
 
 === TEST 10: variable expires with if's (1d)
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
@@ -321,6 +330,7 @@ X-Foo: [a-z0-9=]+$
 
 === TEST 11: variable expires with if's (16d)
 --- main_config
+    load_module /etc/nginx/modules/ndk_http_module.so;
     load_module /etc/nginx/modules/ngx_http_echo_module.so;
     load_module /etc/nginx/modules/ngx_http_encrypted_session_module.so;
     load_module /etc/nginx/modules/ngx_http_set_misc_module.so;
