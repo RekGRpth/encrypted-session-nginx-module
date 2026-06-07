@@ -13,6 +13,7 @@
 #include "ngx_http_encrypted_session_cipher.h"
 #include <openssl/evp.h>
 #include <openssl/md5.h>
+#include <openssl/crypto.h>
 #include <stdint.h>
 
 
@@ -227,7 +228,7 @@ ngx_http_encrypted_session_aes_mac_decrypt(
 
     MD5(*dst, *dst_len, new_digest);
 
-    if (ngx_strncmp(digest, new_digest, MD5_DIGEST_LENGTH) != 0) {
+    if (CRYPTO_memcmp(digest, new_digest, MD5_DIGEST_LENGTH) != 0) {
         ngx_log_debug0(NGX_LOG_DEBUG_HTTP, log, 0,
                        "failed to decrypt session: MD5 checksum mismatch");
 
@@ -241,7 +242,8 @@ ngx_http_encrypted_session_aes_mac_decrypt(
 
     p -= sizeof(expires_time);
 
-    expires_time = ngx_http_encrypted_session_ntohll(*((uint64_t *) p));
+    ngx_memcpy(&expires_time, p, sizeof(expires_time));
+    expires_time = ngx_http_encrypted_session_ntohll(expires_time);
 
     now = time(NULL);
     if (now == -1) {
