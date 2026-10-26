@@ -5,7 +5,7 @@ use Test::Nginx::Socket;
 
 repeat_each(2);
 
-plan tests => repeat_each() * (2 * blocks() + 7) - 4 - 10;
+plan tests => repeat_each() * (2 * blocks() + 7) - 4 - 8;
 
 no_long_string();
 
@@ -41,9 +41,9 @@ __DATA__
     }
 --- request
     GET /encode
---- response_body
-res = ktrp3n437q42laejppc9d4bg0jpv0ejie106ooo65od9lf5huhs0====
-b = abc
+--- response_body_like
+^res = [0-9a-v=]{104}
+b = abc$
 --- error_log
 
 
@@ -73,9 +73,9 @@ b = abc
     }
 --- request
     GET /encode
---- response_body
-res = ktrp3n437q42laejppc9d4bg0hul4pmqhc8tn2laae40aakqfoh0====
-b = abc
+--- response_body_like
+^res = [0-9a-v=]{104}
+b = abc$
 
 
 
@@ -106,7 +106,7 @@ b = abc
 --- request
     GET /encode
 --- response_body_like
-^res = [0-9a-v=]{30,}
+^res = [0-9a-v=]{104}
 b = abc$
 --- error_log
 
@@ -132,7 +132,7 @@ b = abc$
 --- request
     GET /encode
 --- response_body_like
-^res = [0-9a-v=]{30,}$
+^res = [0-9a-v=]{104}$
 
 
 
@@ -361,4 +361,4 @@ X-Foo: [a-z0-9=]+$
 --- response_headers_like chop
 X-Foo: [a-z0-9=]+$
 --- error_log
-
+encrypted_session: expires=1382400
